@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from problems import views
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^api/problems/$', views.problems_list),
+    # url(r'^api/problems/(?P<pk>[0-9]+)$', views.problems_detail),
 ]
