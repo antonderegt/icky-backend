@@ -1,0 +1,3 @@
+[submodule "icky-frontend"]
+	path = icky-frontend
+	url = https://github.com/antonderegt/icky-frontend.git
