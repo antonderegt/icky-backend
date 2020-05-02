@@ -4,8 +4,8 @@
 ```
 python3 -m venv [path_to_folder]
 source [path_to_folder]/bin/activate
-pip install django djangorestframework django-cors-headers
 cd icky-project
+pip install -r requirements.txt
 python manage.py startapp icky-project
 python manage.py makemigrations
 python manage.py migrate
