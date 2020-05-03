@@ -20,7 +20,8 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^api/problems/$', views.problems_list),
-    url(r'^api/problems/(?P<pk>[0-9]+)$', views.problems_detail),
+    url(r'^api/problems/$', views.problems_list, name="get_post_problems"),
+    url(r'^api/problems/(?P<pk>[0-9]+)$', views.problem_detail, name="get_delete_update_problem"),
+    url(r'^api/problems/(?P<pk>[0-9]+)/categories$', views.problem_categories, name="get_delete_update_problem_categories"),
     url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)$', views.category_detail),
 ]

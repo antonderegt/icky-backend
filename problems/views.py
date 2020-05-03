@@ -40,15 +40,47 @@ def problems_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-import logging
-logger = logging.getLogger(__name__)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def problems_detail(request, pk):
+def problem_detail(request, pk):
     """
     Retrieve, update or delete a customer by id/pk.
     """
-    problem = Problem.objects.get(pk=pk)
+    # try:
+    #     problem = Problem.objects.get(pk=pk)
+    # except Problem.DoesNotExist:
+    #     return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # try:
+    #     category = problem.categories.all()
+    # except Category.DoesNotExist:
+    #     return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # if request.method == 'GET':
+    #     serializer = CategorySerializer(category,context={'request': request}, many=True)
+    #     return Response(serializer.data)
+
+    # elif request.method == 'PUT':
+    #     serializer = CategorySerializer(category, data=request.data,context={'request': request})
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # elif request.method == 'DELETE':
+    #     category.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def problem_categories(request, pk):
+    """
+    Retrieve, update or delete a customer by id/pk.
+    """
+    try:
+        problem = Problem.objects.get(pk=pk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     try:
         category = problem.categories.all()
     except Category.DoesNotExist:
@@ -74,8 +106,16 @@ def category_detail(request, problemPk, catPk):
     """
     Retrieve, update or delete a customer by id/pk.
     """
-    problem = Problem.objects.get(pk=problemPk)
-    category = problem.categories.get(pk=catPk)
+    try:
+        problem = Problem.objects.get(pk=problemPk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        category = problem.categories.get(pk=catPk)
+    except Category.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     try:
         item = category.items.all()
     except Item.DoesNotExist:
