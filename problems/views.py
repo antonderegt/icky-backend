@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Problem
+from .models import Problem, Category
 from .serializers import *
 
 @api_view(['GET', 'POST'])
@@ -40,3 +40,32 @@ def problems_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+import logging
+logger = logging.getLogger(__name__)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def problems_detail(request, pk):
+    """
+    Retrieve, update or delete a customer by id/pk.
+    """
+    problem = Problem.objects.get(pk=pk)
+    try:
+        category = problem.categories.all()
+    except Category.DoesNotExist:
+        logger.error('error encountereddddddddd')
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CategorySerializer(category,context={'request': request}, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = CategorySerializer(category, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        category.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

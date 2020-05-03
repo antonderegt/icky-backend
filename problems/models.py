@@ -9,7 +9,7 @@ class Problem(models.Model):
         return self.problem
 
 class Category(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, related_name="categories", on_delete=models.CASCADE)
     category = models.CharField("Category name", max_length=255)
 
     def __str__(self):

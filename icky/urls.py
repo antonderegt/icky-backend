@@ -21,5 +21,5 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/problems/$', views.problems_list),
-    # url(r'^api/problems/(?P<pk>[0-9]+)$', views.problems_detail),
+    url(r'^api/problems/(?P<pk>[0-9]+)$', views.problems_detail),
 ]
