@@ -59,6 +59,14 @@ CORS_ORIGIN_WHITELIST = (
        'http://localhost:8080',
 )
 
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [],
+#     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+# }
+
+
 ROOT_URLCONF = 'icky.urls'
 
 TEMPLATES = [

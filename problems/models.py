@@ -8,6 +8,9 @@ class Problem(models.Model):
     def __str__(self):
         return self.problem
 
+    def get_description(self):
+        return self.description
+
 class Category(models.Model):
     problem = models.ForeignKey(Problem, related_name="categories", on_delete=models.CASCADE)
     category = models.CharField("Category name", max_length=255)
