@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/problems/$', views.problems_list),
     url(r'^api/problems/(?P<pk>[0-9]+)$', views.problems_detail),
+    url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)$', views.category_detail),
 ]

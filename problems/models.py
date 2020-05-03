@@ -16,7 +16,7 @@ class Category(models.Model):
         return self.category
 
 class Item(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name="items", on_delete=models.CASCADE)
     item = models.CharField("Item name", max_length=255)
 
     def __str__(self):

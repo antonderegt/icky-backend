@@ -29,3 +29,4 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Item)
