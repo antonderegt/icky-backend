@@ -47,9 +47,39 @@ class GetProblemsTest(TestCase):
         response = client.get(reverse('get_delete_update_problem', kwargs={'pk': self.p1.pk}))
         problem = Problem.objects.get(pk=self.p1.pk)
         serializer = ProblemSerializer(problem)
-        self.assertEqual(response, serializer.data)
+        self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK) 
     
     def test_get_invalid_single_problem(self):
         response = client.get(reverse('get_delete_update_problem', kwargs={'pk': 30}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CreateNewProblemTest(TestCase):
+    """ Test module for inserting a new problem """
+
+    def setUp(self):
+        self.valid_payload = {
+            'problem': 'New Problem',
+            'description': 'Desc of new problem'
+        }
+        self.invalid_payload = {
+            'problem': '',
+            'description': 'White'
+        }
+
+    def test_create_valid_problem(self):
+        response = client.post(
+            reverse('get_post_problems'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_problem(self):
+        response = client.post(
+            reverse('get_post_problems'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
