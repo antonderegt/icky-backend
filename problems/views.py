@@ -46,30 +46,25 @@ def problem_detail(request, pk):
     """
     Retrieve, update or delete a customer by id/pk.
     """
-    # try:
-    #     problem = Problem.objects.get(pk=pk)
-    # except Problem.DoesNotExist:
-    #     return Response(status=status.HTTP_404_NOT_FOUND)
+    try:
+        problem = Problem.objects.get(pk=pk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # try:
-    #     category = problem.categories.all()
-    # except Category.DoesNotExist:
-    #     return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = ProblemSerializer(problem,context={'request': request})
+        return Response(serializer.data)
 
-    # if request.method == 'GET':
-    #     serializer = CategorySerializer(category,context={'request': request}, many=True)
-    #     return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = ProblemSerializer(problem, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # elif request.method == 'PUT':
-    #     serializer = CategorySerializer(category, data=request.data,context={'request': request})
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # elif request.method == 'DELETE':
-    #     category.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'DELETE':
+        problem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def problem_categories(request, pk):
