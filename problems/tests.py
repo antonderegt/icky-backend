@@ -1,10 +1,11 @@
-from django.test import TestCase
+# from django.test import TestCase
+from rest_framework.test import APITestCase
 from .models import Problem
 
 def create_problem(name, desc):
     return Problem.objects.create(problem=name, description=desc)
 
-class ProblemModelTest(TestCase):
+class ProblemModelTest(APITestCase):
     """
     Test Problem Model
     """
@@ -18,14 +19,14 @@ class ProblemModelTest(TestCase):
 
 import json
 from rest_framework import status
-from django.test import TestCase, Client
+from django.test import Client
 from django.urls import reverse
 from .serializers import ProblemSerializer
 
 # initialize the APIClient app
 client = Client()
 
-class GetProblemsTest(TestCase):
+class GetProblemsTest(APITestCase):
     """
     Test module for GET all problems API
     """
@@ -55,7 +56,7 @@ class GetProblemsTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-class CreateNewProblemTest(TestCase):
+class CreateNewProblemTest(APITestCase):
     """ Test module for inserting a new problem """
 
     def setUp(self):
@@ -83,3 +84,55 @@ class CreateNewProblemTest(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class UpdateProblemTest(APITestCase):
+    """ Test module for updating a problem """
+
+    def setUp(self):
+        self.problemToBeUpdated = create_problem("Old name", "Old Desc")
+        self.valid_payload = {
+            'problem': 'Updated Problem',
+            'description': 'Desc of updated problem'
+        }
+        self.invalid_payload = {
+            'problem': '',
+            'description': 'Invalid description'
+        }
+
+    def test_update_valid_problem(self):
+        response = client.put(
+            reverse('get_delete_update_problem', kwargs={'pk': self.problemToBeUpdated.pk}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_update_invalid_problem(self):
+        response = client.put(
+            reverse('get_delete_update_problem', kwargs={'pk': self.problemToBeUpdated.pk}),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class DeleteSingleProblemTest(APITestCase):
+    """ Test module for deleting an existing problem record """
+
+    def setUp(self):
+        self.problemToBeDeleted = create_problem("Delete", "Problem to be deleted.")
+
+    def test_valid_delete_problem(self):
+        response = client.get(reverse('get_delete_update_problem', kwargs={'pk': self.problemToBeDeleted.pk}))
+        problem = Problem.objects.get(pk=self.problemToBeDeleted.pk)
+        serializer = ProblemSerializer(problem)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK) 
+        response = client.delete(reverse('get_delete_update_problem', kwargs={'pk': self.problemToBeDeleted.pk}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = client.get(reverse('get_delete_update_problem', kwargs={'pk': self.problemToBeDeleted.pk}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND) 
+
+    def test_invalid_delete_problem(self):
+        response = client.delete(
+            reverse('get_delete_update_problem', kwargs={'pk': 30}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
