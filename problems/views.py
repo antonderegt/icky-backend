@@ -96,6 +96,25 @@ def problem_categories(request, pk):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['PUT'])
+def category_add(request, problemPk):
+    """
+    Add new category to problem
+    """
+    try:
+        problem = Problem.objects.get(pk=problemPk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    category = Problem.objects.create(problem=problem)
+
+    if request.method == 'PUT':
+        serializer = CategorySerializer(category, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def category_detail(request, problemPk, catPk):
     """
@@ -121,7 +140,7 @@ def category_detail(request, problemPk, catPk):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = ItemSerializer(category, data=request.data,context={'request': request})
+        serializer = CategorySerializer(category, data=request.data,context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -131,6 +150,29 @@ def category_detail(request, problemPk, catPk):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['PUT'])
+def item_add(request, problemPk, catPk):
+    """
+    Add new item to problem category
+    """
+    try:
+        problem = Problem.objects.get(pk=problemPk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        category = problem.categories.get(pk=catPk)
+    except Category.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    item = Item.objects.create(category=category)
+
+    if request.method == 'PUT':
+        serializer = ItemSerializer(item, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def item_detail(request, problemPk, catPk, itemPk):
