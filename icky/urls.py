@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from problems import views
 from django.conf.urls import url
+from .views import login
+# from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +29,7 @@ urlpatterns = [
     url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)$', views.category_detail),
     url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)/new$', views.item_add),
     url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)/(?P<itemPk>[0-9]+)$', views.item_detail),
+    # path('api/login', login),
+    path('api-token-auth/', login, name='api-token-auth')
+    # path('api-token-auth/', obtain_auth_token, name='api-token-auth')
 ]

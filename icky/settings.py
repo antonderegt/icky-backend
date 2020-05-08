@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'problems',
 ]
@@ -57,6 +58,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
        'http://localhost:8080',
+    #    'http://127.0.0.1:8080',
+    #    'http://192.168.178.20:8080'
 )
 
 # REST_FRAMEWORK = {
@@ -65,6 +68,14 @@ CORS_ORIGIN_WHITELIST = (
 #     'DEFAULT_PERMISSION_CLASSES': [],
 #     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly', )
+}
 
 
 ROOT_URLCONF = 'icky.urls'
