@@ -106,7 +106,7 @@ def category_add(request, problemPk):
     except Problem.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    category = Problem.objects.create(problem=problem)
+    category = Category.objects.create(problem=problem)
 
     if request.method == 'PUT':
         serializer = CategorySerializer(category, data=request.data,context={'request': request})
