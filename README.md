@@ -1,5 +1,9 @@
 # Icky Project
 
+## ToDo
+- [ ] Rate limiter
+- [ ] Expire token
+
 ## Prepare and run Backend
 ```
 python3 -m venv [path_to_folder]
