@@ -15,3 +15,15 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('pk', 'item')
+
+class CategoryItemSerializer(serializers.ModelSerializer):
+    items = ItemSerializer(many=True)
+    class Meta:
+        model = Category
+        fields = ('pk', 'category','items')
+
+class ProblemCategoryItemSerializer(serializers.ModelSerializer):
+    categories = CategoryItemSerializer(many=True)
+    class Meta:
+        model = Problem
+        fields = ('pk', 'problem', 'categories')

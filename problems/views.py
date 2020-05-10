@@ -208,3 +208,58 @@ def item_detail(request, problemPk, catPk, itemPk):
     elif request.method == 'DELETE':
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def get_category_and_items(request, problemPk, catPk):
+    """
+    Retrieve, update or delete a customer by id/pk.
+    """
+    try:
+        problem = Problem.objects.get(pk=problemPk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        category = problem.categories.get(pk=catPk)
+    except Category.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CategoryItemSerializer(category,context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer =  CategoryItemSerializer(category, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        category.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def get_problem_categories_and_items(request, problemPk):
+    """
+    Retrieve, update or delete a customer by id/pk.
+    """
+    try:
+        problem = Problem.objects.get(pk=problemPk)
+    except Problem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ProblemCategoryItemSerializer(problem,context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer =  ProblemCategoryItemSerializer(problem, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        problem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

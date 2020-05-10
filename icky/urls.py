@@ -30,6 +30,8 @@ urlpatterns = [
     url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)/new$', views.item_add),
     url(r'^api/problems/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)/(?P<itemPk>[0-9]+)$', views.item_detail),
     # path('api/login', login),
-    path('api-token-auth/', login, name='api-token-auth')
+    path('api-token-auth/', login, name='api-token-auth'),
     # path('api-token-auth/', obtain_auth_token, name='api-token-auth')
+    url(r'^api/problems/getall/(?P<problemPk>[0-9]+)$', views.get_problem_categories_and_items),
+    url(r'^api/problems/getall/(?P<problemPk>[0-9]+)/(?P<catPk>[0-9]+)$', views.get_category_and_items),
 ]
