@@ -1,4 +1,5 @@
 # Icky Project
+Have you ever encountered a problem that seemed too hard to solve? Icky will help you come up with solutions for problems that seem impossible. It's best explained over [here](https://matttaylor.com/public/zwicky_box_uses.htm). If you don't feel like reading the whole text, just give it a go (when it's MVP ready).
 
 ## ToDo
 - [ ] Rate limiter
